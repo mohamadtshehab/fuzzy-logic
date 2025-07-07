@@ -141,7 +141,7 @@ ga.plot_best_route(results['best_route'])
 
 ### Team Member Responsibilities
 
-#### **You (Project Lead)**
+#### **Mohamad**
 - **Fuzzy Expert System Core Implementation** (`src/fuzzy_system.py`)
 - **System Architecture Design**
 - **Integration and Testing**
