@@ -59,9 +59,9 @@ with st.sidebar:
 
 if st.button("Evaluate Risk & Intervention"):
     with st.spinner("Evaluating..."):
-        print(f"Evaluating with: speed={speed}, weather={weather}, focus={focus}")  # طباعة المدخلات
+        print(f"Evaluating with: speed={speed}, weather={weather}, focus={focus}")
         result = st.session_state.system.evaluate(speed, weather, focus)
-        print(f"Result: risk={result['risk']}, intervention={result['intervention']}")  # طباعة المخرجات
+        print(f"Result: risk={result['risk']}, intervention={result['intervention']}")
         risk = result['risk']
         intervention = result['intervention']
 
@@ -109,14 +109,12 @@ if st.button("Evaluate Risk & Intervention"):
             st.write(f"{key.capitalize()}: {val:.3f}")
             st.progress(min(1.0, val))
 
-# عرض القيم الحالية
 st.subheader("Current Input Values")
 col1, col2, col3 = st.columns(3)
 col1.metric("Speed", f"{speed} km/h")
 col2.metric("Weather", f"{weather}/10")
 col3.metric("Focus", f"{focus}/10")
 
-# عرض نتائج 
 st.subheader("Evaluation Results")
 with st.expander("Show Test Cases", expanded=False):
     st.write("### Test Cases Results")

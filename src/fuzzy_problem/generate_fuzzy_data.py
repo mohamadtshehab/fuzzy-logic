@@ -27,4 +27,4 @@ for _ in range(num_samples):
 df = pd.DataFrame(data, columns=['Speed', 'Weather', 'Focus', 'Risk', 'Intervention'])
 
 df.to_csv('fuzzy_data_generated.csv', index=False)
-print("✅  fuzzy_data_generated.csv")
+print("don... fuzzy_data_generated.csv")

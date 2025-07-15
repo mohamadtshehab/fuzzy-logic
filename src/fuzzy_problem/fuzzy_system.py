@@ -34,7 +34,7 @@ class FuzzyDrivingRiskSystem:
             self.test_cases = [
                 (130, 9, 1, 9, 9), (80, 5, 5, 5, 5), (30, 1, 9, 2, 1),
                 (110, 8, 9, 6, 6), (50, 5, 3, 4, 5)
-            ]  # نسخة احتياطية
+            ]
 
         self._setup_universes()
         self._setup_membership_functions()
@@ -71,7 +71,6 @@ class FuzzyDrivingRiskSystem:
 
     def _setup_rules(self):
         self.rules = [
-            # Speed: low
             ctrl.Rule(self.speed['low'] & self.weather['good'] & self.focus['high'],
                       (self.risk['low'], self.intervention['none'])),
             ctrl.Rule(self.speed['low'] & self.weather['good'] & self.focus['medium'],
@@ -90,7 +89,6 @@ class FuzzyDrivingRiskSystem:
                       (self.risk['medium'], self.intervention['warning'])),
             ctrl.Rule(self.speed['low'] & self.weather['bad'] & self.focus['low'],
                       (self.risk['high'], self.intervention['emergency'])),
-            # Speed: medium
             ctrl.Rule(self.speed['medium'] & self.weather['good'] & self.focus['high'],
                       (self.risk['low'], self.intervention['none'])),
             ctrl.Rule(self.speed['medium'] & self.weather['good'] & self.focus['medium'],
@@ -109,7 +107,6 @@ class FuzzyDrivingRiskSystem:
                       (self.risk['high'], self.intervention['emergency'])),
             ctrl.Rule(self.speed['medium'] & self.weather['bad'] & self.focus['low'],
                       (self.risk['high'], self.intervention['emergency'])),
-            # Speed: high
             ctrl.Rule(self.speed['high'] & self.weather['good'] & self.focus['high'],
                       (self.risk['medium'], self.intervention['warning'])),
             ctrl.Rule(self.speed['high'] & self.weather['good'] & self.focus['medium'],

@@ -1,13 +1,8 @@
-"""
-Command Line Interface for TSP Genetic Algorithm
-"""
-
 import argparse
 from src.genetic_algorithm.genetic_algorithm import TSPGeneticAlgorithm, run_tsp_example
 
 
 def main():
-    """Main CLI function for the TSP Genetic Algorithm."""
     parser = argparse.ArgumentParser(
         description="Traveling Salesman Problem Genetic Algorithm",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -81,7 +76,6 @@ Examples:
     
     print("=== TSP Genetic Algorithm CLI ===\n")
     
-    # Generate cities
     print(f"Generating {args.cities} random cities...")
     ga = TSPGeneticAlgorithm([])  # Temporary instance
     cities = ga.generate_test_cities(args.cities)
@@ -90,7 +84,6 @@ Examples:
     for city in cities:
         print(f"City {city.id}: ({city.x:.1f}, {city.y:.1f})")
     
-    # Create GA instance
     print(f"\nInitializing Genetic Algorithm...")
     print(f"Parameters:")
     print(f"  - Population Size: {args.population}")
@@ -105,23 +98,19 @@ Examples:
         tournament_size=args.tournament
     )
     
-    # Run evolution
     print(f"\nStarting evolution...")
     results = ga.evolve(generations=args.generations, verbose=args.verbose)
     
-    # Display results
     print(f"\n=== Results ===")
     print(f"Best fitness (distance): {results['best_fitness']:.2f}")
     print(f"Best route: {[c.id for c in results['best_route']]}")
     
-    # Calculate some statistics
     final_fitness = results['final_fitness_values']
     print(f"Final population statistics:")
     print(f"  - Best fitness: {min(final_fitness):.2f}")
     print(f"  - Average fitness: {sum(final_fitness)/len(final_fitness):.2f}")
     print(f"  - Worst fitness: {max(final_fitness):.2f}")
     
-    # Plot results if not disabled
     if not args.no_plots:
         print(f"\nGenerating plots...")
         try:
