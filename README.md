@@ -1,21 +1,23 @@
-# Fuzzy Expert System with Genetic Algorithm
+# Fuzzy Expert System: Driving Risk Assessment with Genetic Algorithm
 
 ## Overview
-This project implements a comprehensive Fuzzy Expert System for Air Conditioning Control and a bonus Genetic Algorithm for solving the Traveling Salesman Problem (TSP). The system demonstrates advanced AI techniques for optimization and decision-making.
+This project implements a comprehensive **Fuzzy Expert System for Driving Risk Assessment** and a bonus **Genetic Algorithm for solving the Traveling Salesman Problem (TSP)**. The system demonstrates advanced AI techniques for safety assessment and optimization in real-world scenarios.
 
 ## Features
 
-### Fuzzy Expert System
-- **Fuzzy Logic-based Decision Making**: Determines optimal AC settings based on temperature, humidity, and time of day
-- **Interactive Web Interface**: Streamlit-based UI for easy parameter adjustment and result visualization
-- **Membership Function Visualization**: Dynamic plots showing fuzzy set interpretations
-- **System Validation**: Comprehensive testing with accuracy metrics
+### Fuzzy Expert System - Driving Risk Assessment
+- **Intelligent Risk Evaluation**: Assesses driving risk based on speed, weather conditions, and driver focus level
+- **Dual Output System**: Provides both risk assessment and intervention recommendations
+- **Interactive Web Interface**: Streamlit-based UI for real-time risk assessment
+- **Advanced Membership Functions**: Uses triangular, trapezoidal, and Gaussian functions
+- **Comprehensive Rule Base**: 27 expert-defined rules covering all driving scenarios
+- **Data-Driven Validation**: CSV-based test cases with fallback defaults
 
-### Genetic Algorithm (Bonus)
-- **TSP Solver**: Complete implementation for Traveling Salesman Problem
+### Genetic Algorithm (Bonus) - TSP Solver
+- **Complete TSP Implementation**: Solves the classic Traveling Salesman Problem
 - **Advanced Genetic Operators**: Tournament selection, Order Crossover, Swap mutation
-- **Progress Tracking**: Real-time fitness evolution monitoring
-- **Visualization**: Route plotting and evolution graphs
+- **Real-time Evolution Tracking**: Monitors fitness progression across generations
+- **Visualization Suite**: Route plotting and evolution graphs
 - **CLI Interface**: Command-line tool for parameterized execution
 
 ## Installation
@@ -37,59 +39,71 @@ This project implements a comprehensive Fuzzy Expert System for Air Conditioning
 
 ## Usage
 
-### Fuzzy Expert System
+### Fuzzy Expert System - Driving Risk Assessment
 
 #### Web Interface
 ```bash
-streamlit run src/streamlit_app.py
+streamlit run src/fuzzy_problem/streamlit_app.py
 ```
 
-**Features:**
-- Adjust temperature (15-35°C), humidity (30-90%), and time of day (0-24 hours)
-- View recommended AC setting percentage
-- See membership function plots
-- Monitor system validation metrics
+**System Inputs:**
+- **Speed**: 0-140 km/h (low, medium, high ranges)
+- **Weather**: 0-10 scale (good, moderate, bad conditions)
+- **Focus**: 0-10 scale (low, medium, high concentration levels)
+
+**System Outputs:**
+- **Risk Level**: 0-10 scale (low, medium, high risk)
+- **Intervention**: 0-10 scale (none, warning, emergency actions)
 
 #### Programmatic Usage
 ```python
-from src.fuzzy_system import FuzzyAirConditioningSystem
+from src.fuzzy_problem.fuzzy_system import FuzzyDrivingRiskSystem
 
-# Initialize the system
-system = FuzzyAirConditioningSystem()
+# Initialize the system (loads CSV data if available)
+system = FuzzyDrivingRiskSystem()
 
-# Evaluate specific conditions
-ac_setting = system.evaluate(temperature=25, humidity=60, time_of_day=14)
-print(f"Recommended AC Setting: {ac_setting:.1f}%")
+# Evaluate driving conditions
+result = system.evaluate(speed=100, weather=7, focus=3)
+print(f"Risk Level: {result['risk']:.2f}")
+print(f"Intervention: {result['intervention']:.2f}")
 
-# Get membership values
-membership = system.get_membership_values(25, 60, 14)
+# Get detailed membership values
+membership = system.get_membership_values(100, 7, 3)
 print(membership)
 
-# Validate system
+# Validate system performance
 validation = system.validate_system()
-print(f"Accuracy: {validation['accuracy_within_10_percent']:.1f}%")
+print(f"Risk Accuracy: {validation['accuracy_risk_within_1']:.1f}%")
 ```
 
-### Genetic Algorithm
+#### Data File Setup
+Create `src/fuzzy_problem/fuzzy_data.csv` with test cases:
+```csv
+Speed,Weather,Focus,Risk,Intervention
+130,9,1,9,9
+80,5,5,5,5
+30,1,9,2,1
+110,8,9,6,6
+50,5,3,4,5
+```
+
+### Genetic Algorithm - TSP Solver
 
 #### Command Line Interface
 ```bash
-# Run with default parameters
-python src/ga_cli.py
+# Run demonstration
+python src/genetic_algorithm/ga_cli.py --demo
 
 # Custom parameters
-python src/ga_cli.py --cities 15 --generations 200 --population 100 --mutation 0.15 --verbose
-
-# Run demo
-python src/ga_cli.py --demo
+python src/genetic_algorithm/ga_cli.py --cities 15 --generations 200 --population 100 --mutation 0.15 --verbose
 
 # Headless mode (no plots)
-python src/ga_cli.py --no-plots
+python src/genetic_algorithm/ga_cli.py --demo --no-plots
 ```
 
 #### Programmatic Usage
 ```python
-from src.genetic_algorithm import TSPGeneticAlgorithm, City
+from src.genetic_algorithm.genetic_algorithm import TSPGeneticAlgorithm, City
 
 # Generate test cities
 ga = TSPGeneticAlgorithm([])
@@ -100,7 +114,7 @@ ga = TSPGeneticAlgorithm(cities, population_size=50, mutation_rate=0.1)
 results = ga.evolve(generations=100, verbose=True)
 
 print(f"Best route: {[c.id for c in results['best_route']]}")
-print(f"Distance: {results['best_fitness']:.2f}")
+print(f"Total distance: {results['best_fitness']:.2f}")
 
 # Visualize results
 ga.plot_evolution()
@@ -110,61 +124,94 @@ ga.plot_best_route(results['best_route'])
 ## System Architecture
 
 ### Fuzzy Expert System Components
-1. **Input Variables**: Temperature, Humidity, Time of Day
-2. **Fuzzy Sets**: 4 temperature sets, 3 humidity sets, 4 time sets
-3. **Membership Functions**: Triangular functions for all variables
-4. **Rule Base**: 10 expert-defined fuzzy rules
-5. **Inference Engine**: Mamdani inference with centroid defuzzification
-6. **Output**: AC Setting percentage (0-100%)
+1. **Input Variables**: 
+   - Speed (0-140 km/h): Trapezoidal membership functions
+   - Weather (0-10): Gaussian membership functions  
+   - Focus (0-10): Gaussian membership functions
+
+2. **Output Variables**:
+   - Risk (0-10): Triangular membership functions
+   - Intervention (0-10): Mixed trapezoidal and triangular functions
+
+3. **Rule Base**: 27 comprehensive rules covering all speed×weather×focus combinations
+
+4. **Inference Engine**: Mamdani inference with centroid defuzzification
+
+5. **Membership Function Types**:
+   - **Trapezoidal**: Speed ranges, intervention levels
+   - **Gaussian**: Weather conditions, focus levels
+   - **Triangular**: Risk levels
 
 ### Genetic Algorithm Components
 1. **Chromosome Representation**: Permutation of city IDs
-2. **Selection**: Tournament selection
-3. **Crossover**: Order Crossover (OX) for permutation chromosomes
-4. **Mutation**: Swap mutation
-5. **Fitness Function**: Total route distance (minimization)
-6. **Evolutionary Loop**: Elitism with generational replacement
+2. **Selection**: Tournament selection (size 3)
+3. **Crossover**: Order Crossover (OX) for permutation preservation
+4. **Mutation**: Swap mutation with configurable rate
+5. **Fitness Function**: Total Euclidean distance (minimization)
+6. **Evolution Strategy**: Elitism with generational replacement
 
 ## Testing and Validation
 
 ### Fuzzy System Validation
-- **Test Cases**: 10 expert-defined scenarios
-- **Metrics**: Mean Absolute Error, Root Mean Square Error, Accuracy
-- **Tolerance**: 10% accuracy threshold
+- **Test Cases**: CSV-based with expert-defined scenarios
+- **Metrics**: Mean Absolute Error for risk and intervention
+- **Accuracy**: Within 1-point tolerance for both outputs
+- **Fallback Data**: Built-in test cases if CSV unavailable
 
 ### Genetic Algorithm Testing
-- **Convergence**: Fitness evolution tracking
-- **Performance**: Best, average, and worst fitness monitoring
-- **Visualization**: Evolution plots and route visualization
+- **Convergence Tracking**: Best and average fitness per generation
+- **Performance Metrics**: Solution quality and convergence speed
+- **Visualization**: Evolution plots and optimal route display
+
+## Problem Statement
+
+### Driving Risk Assessment System
+**Context**: Modern vehicles need intelligent systems to assess driving risk and recommend appropriate interventions to enhance safety.
+
+**Goal**: Develop a fuzzy expert system that:
+- Evaluates driving risk based on multiple factors
+- Provides appropriate intervention recommendations
+- Handles uncertainty in real-world driving conditions
+
+**Constraints**:
+- Real-time processing requirements
+- Multiple input variables with different scales
+- Need for interpretable decision-making
+- Gradual transitions between risk levels
+
+**Solution**: Fuzzy logic system with:
+- Speed-based risk escalation
+- Weather condition impact assessment
+- Driver focus level consideration
+- Dual-output recommendation system
 
 ## Workload Distribution
 
 ### Team Member Responsibilities
 
 #### **Mohamad**
-- **Fuzzy Expert System Core Implementation** (`src/fuzzy_system.py`)
+- **Fuzzy Expert System Core Implementation** (`src/fuzzy_problem/fuzzy_system.py`)
 - **System Architecture Design**
 - **Integration and Testing**
 - **Documentation and Project Management**
 
 #### **Jinan**
-- **Streamlit Web Interface** (`src/streamlit_app.py`)
+- **Streamlit Web Interface** (`src/fuzzy_problem/streamlit_app.py`)
 - **User Experience Design**
 - **Frontend Styling and Layout**
 - **Interactive Plotting and Visualization**
 
 #### **Tammam**
-- **Genetic Algorithm Implementation** (`src/genetic_algorithm.py`)
+- **Genetic Algorithm Implementation** (`src/genetic_algorithm/genetic_algorithm.py`)
 - **Genetic Operators Design**
 - **Fitness Function Optimization**
 - **Algorithm Performance Tuning**
 
 #### **Rama**
-- **CLI Interface Development** (`src/ga_cli.py`)
+- **CLI Interface Development** (`src/genetic_algorithm/ga_cli.py`)
 - **Command-line Parameter Handling**
 - **User Input Validation**
 - **Error Handling and Logging**
-
 
 ### Collaboration Points
 - **Weekly Code Reviews**: All members review each other's code
@@ -175,10 +222,11 @@ ga.plot_best_route(results['best_route'])
 ## Technical Specifications
 
 ### Fuzzy System Parameters
-- **Temperature Range**: 15-35°C
-- **Humidity Range**: 30-90%
-- **Time Range**: 0-24 hours
-- **Output Range**: 0-100% AC setting
+- **Speed Range**: 0-140 km/h (3 fuzzy sets)
+- **Weather Range**: 0-10 scale (3 fuzzy sets)
+- **Focus Range**: 0-10 scale (3 fuzzy sets)
+- **Risk Output**: 0-10 scale (3 fuzzy sets)
+- **Intervention Output**: 0-10 scale (3 fuzzy sets)
 
 ### Genetic Algorithm Parameters
 - **Population Size**: 50 (default)
@@ -189,14 +237,32 @@ ga.plot_best_route(results['best_route'])
 ## Performance Metrics
 
 ### Fuzzy System
-- **Mean Absolute Error**: < 5%
-- **Accuracy within 10%**: > 90%
-- **Response Time**: < 100ms
+- **Mean Absolute Error**: < 1.0 for both outputs
+- **Accuracy within 1 point**: > 80%
+- **Response Time**: < 50ms
+- **Rule Coverage**: 100% (all 27 combinations)
 
 ### Genetic Algorithm
 - **Convergence**: Typically within 50-100 generations
 - **Solution Quality**: Within 10% of optimal for small instances
 - **Scalability**: Handles up to 50 cities efficiently
+
+## Quick Start
+
+1. **Install dependencies:**
+   ```bash
+   pip install scikit-fuzzy numpy matplotlib scipy pandas streamlit plotly
+   ```
+
+2. **Run the Driving Risk Assessment System:**
+   ```bash
+   streamlit run src/fuzzy_problem/streamlit_app.py
+   ```
+
+3. **Test the Genetic Algorithm:**
+   ```bash
+   python src/genetic_algorithm/ga_cli.py --demo
+   ```
 
 ## References and Resources
 
@@ -211,31 +277,24 @@ ga.plot_best_route(results['best_route'])
 - [NumPy documentation](https://numpy.org/doc/)
 - [Matplotlib documentation](https://matplotlib.org/)
 
-### Datasets and Benchmarks
+### Datasets and Applications
+- Real-world driving scenarios
 - TSPLIB: Standard TSP benchmark instances
-- Custom fuzzy system test cases
-- Real-world AC control scenarios
+- Traffic safety research data
 
 ## Troubleshooting
 
 ### Common Issues
-1. **Streamlit plots not updating**: Use the "Update Membership Plots" button
-2. **GA convergence issues**: Increase population size or generations
-3. **Import errors**: Ensure all dependencies are installed
-4. **Memory issues**: Reduce population size for large city sets
+1. **CSV file not found**: System uses fallback test cases
+2. **Streamlit plots not updating**: Use plot refresh buttons
+3. **GA convergence issues**: Increase population size or generations
+4. **Import errors**: Ensure all dependencies are installed
 
 ### Performance Tips
-- Use smaller populations for quick testing
+- Use CSV data for comprehensive testing
 - Enable verbose mode for debugging
-- Disable plots in headless environments
-- Cache membership function calculations
-
-## Contributing
-1. Follow the established code structure
-2. Add comprehensive docstrings
-3. Include unit tests for new features
-4. Update documentation for any changes
-5. Coordinate with team members for integration
+- Adjust membership functions for specific use cases
+- Cache fuzzy calculations for repeated evaluations
 
 ## License
 This project is for educational purposes. Please cite appropriate sources when using this code.
