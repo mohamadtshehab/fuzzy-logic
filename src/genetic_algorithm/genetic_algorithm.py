@@ -13,13 +13,14 @@ Problem Statement:
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
 import random
 from typing import List, Tuple, Dict, Optional
 import pandas as pd
 from dataclasses import dataclass
 import time
-
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 @dataclass
 class City:
@@ -275,9 +276,9 @@ class TSPGeneticAlgorithm:
             'final_population': population,
             'final_fitness_values': fitness_values
         }
-    
-    def plot_evolution(self, save_path: Optional[str] = None):
-        """Plot the evolution of fitness over generations."""
+        
+    def plot_evolution(self, save_path: Optional[str] = "src/genetic_algorithm/evolution_plot.png"):
+        """Plot fitness evolution and save to file."""
         plt.figure(figsize=(12, 6))
         
         plt.subplot(1, 2, 1)
@@ -297,28 +298,18 @@ class TSPGeneticAlgorithm:
         plt.grid(True)
         
         plt.tight_layout()
-        
-        if save_path:
-            plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        
-        plt.show()
-    
-    def plot_best_route(self, route: List[City], save_path: Optional[str] = None):
-        """Plot the best route found."""
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        plt.close()
+        print(f"Evolution plot saved to {save_path}")
+
+    def plot_best_route(self, route: List[City], save_path: Optional[str] = "src/genetic_algorithm/best_route_plot.png"):
+        """Plot the best route found and save to file."""
         plt.figure(figsize=(10, 8))
         
-        # Plot cities
-        x_coords = [city.x for city in route]
-        y_coords = [city.y for city in route]
+        x_coords = [city.x for city in route] + [route[0].x]
+        y_coords = [city.y for city in route] + [route[0].y]
         
-        # Add the starting city to complete the route
-        x_coords.append(route[0].x)
-        y_coords.append(route[0].y)
-        
-        # Plot the route
         plt.plot(x_coords, y_coords, 'b-o', linewidth=2, markersize=8, label='Route')
-        
-        # Plot city labels
         for i, city in enumerate(route):
             plt.annotate(f'City {city.id}', (city.x, city.y), 
                         xytext=(5, 5), textcoords='offset points')
@@ -329,10 +320,9 @@ class TSPGeneticAlgorithm:
         plt.legend()
         plt.grid(True)
         
-        if save_path:
-            plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        
-        plt.show()
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        plt.close()
+        print(f"Best route plot saved to {save_path}")
     
     def generate_test_cities(self, num_cities: int = 10) -> List[City]:
         """Generate random test cities."""
@@ -344,7 +334,7 @@ class TSPGeneticAlgorithm:
         return cities
 
 
-def run_tsp_example():
+def run_tsp_example(no_plots: bool = False):
     """Run a complete example of the TSP Genetic Algorithm."""
     print("=== TSP Genetic Algorithm Example ===\n")
     
@@ -374,12 +364,15 @@ def run_tsp_example():
     print(f"Best fitness found: {results['best_fitness']:.2f}")
     print(f"Best route: {[c.id for c in results['best_route']]}")
     
-    # Plot results
-    ga.plot_evolution()
-    ga.plot_best_route(results['best_route'])
+    # Plot results if not disabled
+    if not no_plots:
+        try:
+            ga.plot_evolution()
+            ga.plot_best_route(results['best_route'])
+        except Exception as e:
+            print(f"Warning: Could not generate plots: {e}")
     
     return ga, results
-
 
 if __name__ == "__main__":
     run_tsp_example() 

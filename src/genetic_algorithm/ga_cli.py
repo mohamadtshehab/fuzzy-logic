@@ -3,8 +3,7 @@ Command Line Interface for TSP Genetic Algorithm
 """
 
 import argparse
-import sys
-from src.genetic_algorithm import TSPGeneticAlgorithm, City, run_tsp_example
+from src.genetic_algorithm.genetic_algorithm import TSPGeneticAlgorithm, run_tsp_example
 
 
 def main():
@@ -77,7 +76,7 @@ Examples:
     
     if args.demo:
         print("Running TSP Genetic Algorithm Demo...")
-        run_tsp_example()
+        run_tsp_example(no_plots=args.no_plots)
         return
     
     print("=== TSP Genetic Algorithm CLI ===\n")
@@ -89,7 +88,7 @@ Examples:
     
     print(f"Generated cities:")
     for city in cities:
-        print(f"  City {city.id}: ({city.x:.1f}, {city.y:.1f})")
+        print(f"City {city.id}: ({city.x:.1f}, {city.y:.1f})")
     
     # Create GA instance
     print(f"\nInitializing Genetic Algorithm...")
@@ -132,7 +131,6 @@ Examples:
             print(f"Warning: Could not generate plots: {e}")
     
     print(f"\nEvolution completed successfully!")
-
 
 if __name__ == "__main__":
     main() 
